@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 import mysql.connector
 from Front_end.read_arduino import arduinoConnection, start_arduino_treat, threadingLastTemperatures, threadingLastHumidities
 import time
+import os
 
 if arduinoConnection():
     start_arduino_treat()
@@ -10,11 +11,11 @@ if arduinoConnection():
     
 
 db = mysql.connector.connect(
-    host = "sql7.freesqldatabase.com",
-    port = "3306",
-    database = "sql7804854" ,
-    user = "sql7804854",
-    password = "qdND4SGgvP")
+    host = os.environ.get("DB_Host"),
+    port = os.environ.get("DB_Port"),
+    database = os.environ.get("DB_Database") ,
+    user = os.environ.get("DB_Username"),
+    password = os.environ.get("DB_Password"))
 
 cursor = db.cursor()
 
