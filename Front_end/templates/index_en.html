@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMY</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Passion+One:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="settingsDisplay">
+    <img onclick="closeTheWindowSettings()" id="closeWindow" src="/static/closeWindow.png" alt="">
+    <ul>
+         <li>
+            <h1 onclick="displayLanguages()" id="language">Languages &#9662;</h1>
+            <ul id="languages">
+                <li><a onclick="pageEn()">English</a></li>
+                <li><a onclick="pageNl()">Dutch</a></li>
+                <li><a onclick="pageEs()">Spanish</a></li>
+            </ul>
+            <h1 id="currentMeisure">Celcius</h1>
+        </li>
+    </ul>
+    <div id="settingsButtons">
+        <button onclick="changeCurrentMeisureToCelcius()">Celcius</button>
+        <button onclick="changeCurrentMeisureToFahrenheit()">Fahrenheit</button>
+    </div>
+</div>
+
+<div id="user_info">
+    <img onclick="closeTheWindowInfo()" id="closeWindow" src="/static/closeWindow.png" alt="">
+    <h1> {{ user_name }} </h1>
+    <div id="user_email"> <h3 id="user_emailText"> User Email: </h3> <h3> {{ email }} </h3> </div>
+    <div id="user_logout"><button id="logout" onclick="logout()"> Logout </button></div>
+
+</div>
+
+<div id="menu">
+    <img onclick="closeTheWindowMenu()" id="closeWindow" src="/static/closeWindow.png" alt="">
+    <nav>
+        <ul id="links">
+            <li><a onclick="getHumidity()" id="humidity">Humidity</a></li>
+            <li><a onclick="getTemperature()" id="temperatura">Temperature</a></li>
+        </ul>
+    </nav>
+</div>
+
+<header class="web">
+    <div id="logo">
+        <img src="/static/AMYlogo.png" alt="" id="logoImage">
+    </div>
+    <div id="right">
+        <button id="dashboard" onclick="displayUserInfo()">
+            <img src="/static/person_info.png" alt="" id="dashImage">
+            <h2 id="dashText">{{ user_name }}</h2>
+        </button>
+        <button id="menudots">
+            <img onclick="displayMenu()" src="/static/menu.png" alt="" id="imagedots">
+        </button>
+        <button id="settings">
+            <img onclick="displaySettings()" src="/static/settings.png" alt="" id="settingsimage">
+        </button>
+    </div>
+</header>
+
+<main>
+    <div id="showTemperature">
+        <h3 id="currentTemperatureText">Current Temperature</h3>
+        <h1><span id="currentTemperature"> </span><span id="currentUnit">&deg;C</span></h1>
+        <canvas id="myChart"></canvas>
+        <button id="update" onclick="updateCurrentTemperature(), getLastData()">Update Now</button>
+    </div>
+
+    <div id="amyImage">
+        <img id="amy" src="/static/amyCold.png" alt="">
+    </div>
+
+    <div id="historyButton">
+        <button onclick="displayTemperatures()" id="theHistoryButton">History</button>
+    </div>
+
+    <div id="temperatures">
+        <img onclick="closeTheWindowHistory()" id="closeHistoryWindow" src="/static/closeWindow.png" alt="">
+        <h2 id="title">History</h2>
+        <div id="gridTemperatures">
+            <h2 class="temperature" id="temperature1"> </h2> <h3 class="watch" id="watch1">10:00</h3>
+            <h2 class="temperature" id="temperature2"> </h2> <h3 class="watch" id="watch2">10:00</h3>
+            <h2 class="temperature" id="temperature3"> </h2> <h3 class="watch" id="watch3">10:00</h3>
+            <h2 class="temperature" id="temperature4"> </h2> <h3 class="watch" id="watch4">10:00</h3>
+            <h2 class="temperature" id="temperature5"> </h2> <h3 class="watch" id="watch5">10:00</h3>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let lastTemperatures = [];
+        let lastHumidities = []
+
+        
+        async function getLastData(){
+            let response = await fetch("/lastTemperatures")
+            let data = await response.json()
+            lastTemperatures = data.lastTemperatures
+            lastHumidities = data.lastHumidities
+            lastTimes = data.lastTimes
+            console.log(window.humedad)
+            console.log(lastHumidities)
+
+            window.myChart.data.labels = lastTimes
+            
+            if (window.humedad == true){
+                window.myChart.data.datasets[0].data = lastHumidities
+                window.myChart.data.datasets[0].label = "Humidity"
+            }
+
+            if (window.humedad == false && window.currentMeisure == "Celcius"){
+                window.myChart.data.datasets[0].data = lastTemperatures
+                window.myChart.data.datasets[0].label = "Temperatures"
+            }
+
+            else if (window.humedad == false && window.currentMeisure == "Fahrenheit"){
+                lastTemperatures = lastTemperatures.map(temp => (temp * 1.8) + 32)
+                window.myChart.data.datasets[0].data = lastTemperatures
+                window.myChart.data.datasets[0].label = "Temperatures"
+            }
+            
+            window.myChart.update()
+        }
+        
+        function createChart(){
+                let ctx = document.getElementById("myChart");
+                window.myChart = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: [":15", ":30", ":45", ":00"],
+                        datasets: [{ 
+                            label: 'Temperatures',
+                            data: [0, 0, 0, 0],
+                            fill: true,
+                            borderColor: 'rgb(104, 155, 231)'  
+                }]
+            }
+        });
+        }
+        createChart()
+        setInterval(getLastData, 6000)
+
+    </script>
+</main>
+</body>
+</html>

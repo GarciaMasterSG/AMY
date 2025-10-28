@@ -1,0 +1,658 @@
+body{
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(221, 219, 219, 0.507);
+    height: 7rem;
+    border-radius: 5px;
+    padding: 0 2rem;
+}
+
+#logo{
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+#logoImage{
+    height: 100%;
+    width: 40%;
+    min-width: 14rem;
+    margin: auto;
+    margin-left: 10%;
+}
+
+#right{
+    margin-left: 1.5rem;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+}
+
+#dashboard{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 2;
+    cursor: pointer; 
+    height: 60%;
+    width: 30%;
+    border-radius: 12px;
+    background-color: rgb(171, 169, 169);
+    border: none;
+    gap: 1rem;
+}
+
+#dashboard:hover{
+    background-color: rgb(182, 182, 182);
+}
+
+#dashboard:active{
+    background-color: rgb(205, 205, 205);
+}
+
+#dashText{
+    display: flex;
+    color: white;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-family:"Montserrat";
+    font-weight: bold;
+    font-size: 4vh;
+}
+
+#dashImage{
+    display: block;
+    margin: 5px;
+    height: 6vh;
+    width: 6vh;
+}
+
+#user_info{
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    background-color: rgb(51, 51, 51);
+    height: 100%;
+    width: 25rem;
+    border-radius: 10px;
+    padding: 0 1.25rem;
+
+}
+
+#user_info h1{
+    font-size: 3.5rem;
+    font-family: "Montserrat";
+    color: white;
+}
+
+#user_email{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    font-family: "Montserrat";
+    color: white;
+}
+
+#user_logout{
+    height: 65%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: end;
+}
+
+#logout{
+    padding: 3rem 7.5rem;
+    font-family: "Montserrat";
+    font-size: 1.25rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 1.5s, background-color 0.25s;
+}
+
+#logout:hover{
+    background-color: rgb(104, 155, 231);
+    color: rgb(219, 37, 37);
+}
+
+#menudots{
+    flex: 1;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    margin-left: 2.5rem;
+}
+
+#imagedots{
+    height: clamp(3rem,8vh,10rem);
+    width: clamp(3rem,6vh,10rem);
+    cursor: pointer;
+}
+
+#imagedots:hover{
+    background-color: rgba(182, 182, 182, 0.156);
+}
+
+#imagedots:active{
+    background-color: rgba(251, 248, 248, 0.182);
+}
+
+#menu{
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    background-color: rgb(51, 51, 51);
+    height: 100%;
+    width: 25rem;
+    border-radius: 10px;
+}
+
+#menu ul{
+    list-style: none;
+}
+
+#menu a{
+    text-decoration: none;
+    font-family: "Montserrat";
+    color: white;
+    font-size: 2.75rem;
+    font-weight: bold;
+}
+
+#menu a:hover{
+    color: rgb(214, 214, 214);
+}
+
+#menu a:active{
+    color: rgb(154, 154, 154);
+}
+
+#humidity{
+    display: block;
+    cursor: pointer;
+    user-select: none;
+}
+
+#temperatura{
+    display: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+#settings{
+    flex: 1;
+    border: none;
+    background-color: transparent;
+}
+
+#settingsimage{
+    height: clamp(3rem,6vh,10rem);
+    width: clamp(3rem,6vh,10rem);
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+#settingsimage:hover{
+    background-color: rgba(182, 182, 182, 0.156);
+}
+
+#settingsimage:active{
+    background-color: rgba(251, 248, 248, 0.182);
+}
+
+#settingsDisplay{
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 999;
+    background-color: rgb(51, 51, 51);
+    height: 100%;
+    width: 25rem;
+    border-radius: 10px;
+}
+
+#closeWindow{
+    position: fixed;
+    top: 0.5rem;
+    right: 0.5rem;
+    cursor: pointer;
+}
+
+#closeWindow:hover{
+    background-color: rgb(104, 155, 231);
+}
+
+#closeWindow:active{
+    background-color: rgb(51, 120, 224);
+}
+
+#settingsDisplay ul{
+    list-style: none;
+    padding: 0 40px;
+}
+
+#settingsDisplay li{
+    text-decoration: none;
+    color: white;
+    font-family: "Montserrat";
+}
+
+#settingsDisplay #language{
+    user-select: none;
+    cursor: pointer;
+}
+
+#settingsDisplay #language:hover{
+    color: rgb(104, 155, 231);
+}
+
+#settingsDisplay #language:active{
+    color: rgb(51, 120, 224);
+}
+
+#languages{
+    display: none;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+#languages a{
+    text-decoration: none;
+    color: white;
+    font-size: 1.25rem;
+    margin: 0 0.5rem;
+}
+
+#languages a:hover{
+    color: rgb(104, 155, 231)
+}
+
+#languages a:active{
+    color: rgb(51, 120, 224)
+}
+
+#currentMeisure{
+    display: flex;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 4rem;
+}
+
+#settingsButtons{
+    height: 80%;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#settingsButtons button{
+    height: 4rem;
+    width: 8rem;
+    font-family: "Montserrat";
+    font-size: 1.25rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#settingsButtons button:hover{
+    background-color: rgb(104, 155, 231);
+    color: white;
+}
+
+main{
+    display: flex;
+    justify-content: space-between;
+}
+
+#showTemperature{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    font-family: "Montserrat";
+    max-height: 100%;
+}
+
+#showTemperature h3{
+    font-size: 1.75rem;
+}
+
+#currentTemperature{
+    font-size: 4rem;
+    margin: 0px;
+    margin-bottom: 2rem;
+}
+
+#update{
+    background-color: rgb(104, 155, 231);
+    font-family: "Montserrat";
+    font-size: 1.60rem;
+    font-weight: bold;
+    color: white;
+    height: 3.5rem;
+    width: 80%;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.60rem;
+    margin: auto;
+}
+
+#update:hover{
+    background-color: rgb(118, 160, 223)
+}
+
+#update:active{
+    background-color: rgb(155, 182, 223)
+}
+
+#showTemperature{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 35%;
+}
+
+#amyImage{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    max-width: 35%;
+    max-height: 100%;
+}
+
+#amy{
+    height: 30rem;
+    width: 30rem;
+}
+
+#temperatures{
+    flex: 1;
+    font-family:"Montserrat";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 35%;
+    max-height: 100%;
+
+}
+
+#title{
+    font-size: 2.1rem;
+    margin-bottom: 0px;
+}
+
+#gridTemperatures{
+    display: grid;
+    align-items: center;
+    text-align: center;
+    grid-template-columns: auto auto;
+    grid-template-rows: repeat(5, 1fr);
+    border-collapse: collapse;
+    padding: 3px 10rem;
+    max-width: 100%;
+    
+}
+
+.watch{
+    color: rgb(112, 111, 111);
+    font-size: 1.25rem;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.075);
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    padding: 0px 4vh;
+}
+
+.temperature{
+    font-size: 2.1rem;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.075);
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 4vh;
+}
+
+#closeHistoryWindow{
+    display: none;
+}
+
+#historyButton{
+    display: none;
+}
+
+#login_body{
+    box-sizing: border-box;
+    background-image: url("login_background.png");
+}
+
+#login{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#login img{
+    height: 8rem;
+    width: 18rem;
+}
+
+#login h1{
+    font-family: "Montserrat";
+    font-size: clamp(25px,3vw,50px)
+}
+
+#login input,
+#login button {
+    width: 68%;
+    height: 10%;
+    font-family: "Montserrat";
+    font-size: clamp(1.2rem,3vw,1.75rem);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.429);
+    box-sizing: border-box;
+    padding: 7px 20px;
+    margin-bottom: 1.75rem;
+}
+
+#login input {
+    border: 1px solid rgba(128, 128, 128, 0.496);
+}
+
+#login input:focus {
+    outline: none;
+}
+
+#login button {
+    cursor: pointer;
+    background-color: rgb(104, 155, 231);
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+#login button:hover{
+    background-color: rgb(118, 160, 223);
+}
+
+#login button:active{
+    background-color: rgb(155, 182, 223);
+}
+
+#login_form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: start;
+    align-items: center;
+    background-color: white;
+    border-radius: 15px;
+    width: 80%;
+    height: 85%;
+    box-shadow: 0 0.5rem 40px rgba(51, 51, 51, 0.338);
+}
+
+#login a{
+    text-decoration: none;
+    font-family: "Montserrat";
+    color: black;
+}
+
+#login a:hover{
+    text-decoration: underline;
+    color: rgb(104, 155, 231);
+}
+
+#sign_form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: start;
+    align-items: center;
+    background-color: white;
+    border-radius: 15px;
+    width: 80%;
+    height: 85%;
+    box-shadow: 0 0.5rem 40px rgba(51, 51, 51, 0.338);
+}
+
+
+@media (max-width: 786px) {
+    main{
+    display: flex;
+    flex-direction: column; 
+    }
+
+    #temperatures{
+        display: none;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        background-color: rgb(51, 51, 51);
+        position: relative;
+        max-width: 100%;
+        width: 100vw;
+        height: 100vh;
+        color: white;
+        border-radius: 0.6rem;
+    }
+
+    #closeHistoryWindow{
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        border-radius: 0.6rem;
+    }
+
+    #closeHistoryWindow:hover{
+        background-color: rgb(155, 182, 223);
+    }
+
+    #closeHistoryWindow:active{
+        background-color: rgb(118, 160, 223);
+    }
+
+    #dashboard{
+        display: none;
+    }
+
+    #menu{
+        width: 100%;
+    }
+
+    #settingsDisplay{
+        width: 100%;
+    }
+
+    #update{
+        margin-top: 4rem;
+    }
+    #showTemperature{
+        max-width: 100%;
+    }
+
+    #amyImage{
+        margin-top: 4rem;
+        margin-bottom: 2.5rem;
+        max-width: 100%;
+        
+    }
+
+    #historyButton{
+        display: block;
+        margin-bottom: 4rem;
+    }
+
+    #theHistoryButton{
+        display: block;
+        background-color: rgb(104, 155, 231);
+        font-family: "Montserrat";
+        font-size: 1.60rem;
+        font-weight: bold;
+        color: white;
+        height: 3.5rem;
+        width: 80%;
+        cursor: pointer;
+        border: none;
+        border-radius: 0.60rem;
+        margin: auto;
+    }
+
+    #theHistoryButton:hover{
+    background-color: rgb(118, 160, 223)
+    }
+
+    #theHistoryButton:active{
+    background-color: rgb(155, 182, 223)
+    }
+
+    #login a{
+        margin-bottom: 1.5rem;
+    }
+
+    #sign_form{
+        height: 95%;
+    }
+
+}
+
+
