@@ -11,11 +11,11 @@ if arduinoConnection():
 '''  
 
 db = mysql.connector.connect(
-    host = "sql7.freesqldatabase.com",#os.environ.get("DB_Host"),
-    port = 3306, #os.environ.get("DB_Port"),
-    database = "sql7804854", #os.environ.get("DB_Database") ,
-    user = "sql7804854",#os.environ.get("DB_Username"),
-    password = "qdND4SGgvP"#os.environ.get("DB_Password")
+    host = os.environ.get("DB_Host"),
+    port = os.environ.get("DB_Port"),
+    database = os.environ.get("DB_Database") ,
+    user = os.environ.get("DB_Username"),
+    password = os.environ.get("DB_Password")
     )
 
 cursor = db.cursor()
