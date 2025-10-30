@@ -42,6 +42,7 @@ def whenNotify(temp):
     elif temp >= 8 and temp <= 35:
         notified = False
 
+'''
 temperature = None
 humidity = None
 arduino = None
@@ -117,7 +118,7 @@ def threadingLastTemperatures():
 def threadingLastHumidities():
     h = threading.Thread(target=lastHumidities, daemon=True)
     h.start()
-
+'''
 
 
 

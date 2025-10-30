@@ -117,6 +117,13 @@ async function connectToArduino(){
                 lines = buffer.split("\n")
                 for (i = 0; i < lines.length - 1; i++){
                     [window.humd, window.temp] = lines[i].split(",")
+                    fetch("/email", 
+                        {
+                            method : "POST",
+                            headers : {"Content-type" : "application/json"},
+                            body : JSON.stringify({temp : window.temp})
+                        }
+                    )
                     console.log(window.temp, window.humd)
                 }
 
@@ -438,7 +445,7 @@ function logout(){
     .then(() => window.location.href = "/login")
 }
 
-setInterval(watchTempList, 1000)
+setInterval(watchTempList, 60000)
 setInterval(modifyCurrentText, 1000)
 setInterval(getTime, 1000)
 setInterval(getLastTemperaturesJS, 1000)

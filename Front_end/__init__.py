@@ -1,21 +1,22 @@
 from flask import Flask, jsonify
 import mysql.connector
-from Front_end.read_arduino import arduinoConnection, start_arduino_treat, threadingLastTemperatures, threadingLastHumidities
+# from Front_end.read_arduino import arduinoConnection, start_arduino_treat, threadingLastTemperatures, threadingLastHumidities
 import time
 import os
-
+'''
 if arduinoConnection():
     start_arduino_treat()
     threadingLastTemperatures()
-    threadingLastHumidities()
-    
+    threadingLastHumidities() 
+'''  
 
 db = mysql.connector.connect(
-    host = os.environ.get("DB_Host"),
-    port = os.environ.get("DB_Port"),
-    database = os.environ.get("DB_Database") ,
-    user = os.environ.get("DB_Username"),
-    password = os.environ.get("DB_Password"))
+    host = "sql7.freesqldatabase.com",#os.environ.get("DB_Host"),
+    port = 3306, #os.environ.get("DB_Port"),
+    database = "sql7804854", #os.environ.get("DB_Database") ,
+    user = "sql7804854",#os.environ.get("DB_Username"),
+    password = "qdND4SGgvP"#os.environ.get("DB_Password")
+    )
 
 cursor = db.cursor()
 
@@ -27,10 +28,12 @@ def create_app():
     from .auth import auth
     from .data import data
     from .storageData import historial
+    from .email import sendEmail
 
     app.register_blueprint(data, url_prefix="/")
     app.register_blueprint(view, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
+    app.register_blueprint(sendEmail, url_prefix="/")
     app.register_blueprint(historial, url_prefix="/")
 
 
