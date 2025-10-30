@@ -47,6 +47,17 @@
     </nav>
 </div>
 
+<div id="alert_message">
+    <div id="alert_messageRelative">
+        <img id="closeAdvice" src="/static/closeBlack.png" alt="">
+        <h1>You are giving permission to AMY <br> 
+        to read data from your computer's port. <br>
+        Do you accept?
+        </h1>
+        <button onclick="connectToArduino()"> I ACCEPT </button>
+    </div>
+</div>
+
 <header class="web">
     <div id="logo">
         <img src="/static/AMYlogo.png" alt="" id="logoImage">
@@ -74,7 +85,8 @@
     </div>
 
     <div id="amyImage">
-        <img id="amy" src="/static/amyCold.png" alt="">
+        <button onclick="displayAlertMessage()" id="arduinoConnect"> Connect to Arduino </button>
+        <img id="amy" src="/static/amyHappy.png" alt="">
     </div>
 
     <div id="historyButton">
@@ -103,29 +115,22 @@
 
         
         async function getLastData(){
-            let response = await fetch("/lastTemperatures")
-            let data = await response.json()
-            lastTemperatures = data.lastTemperatures
-            lastHumidities = data.lastHumidities
-            lastTimes = data.lastTimes
-            console.log(window.humedad)
-            console.log(lastHumidities)
 
-            window.myChart.data.labels = lastTimes
+            window.myChart.data.labels = window.watchList
             
             if (window.humedad == true){
-                window.myChart.data.datasets[0].data = lastHumidities
+                window.myChart.data.datasets[0].data = window.humdList
                 window.myChart.data.datasets[0].label = "Humidity"
             }
 
             if (window.humedad == false && window.currentMeisure == "Celcius"){
-                window.myChart.data.datasets[0].data = lastTemperatures
+                window.myChart.data.datasets[0].data = window.tempList
                 window.myChart.data.datasets[0].label = "Temperatures"
             }
 
             else if (window.humedad == false && window.currentMeisure == "Fahrenheit"){
-                lastTemperatures = lastTemperatures.map(temp => (temp * 1.8) + 32)
-                window.myChart.data.datasets[0].data = lastTemperatures
+                window.tempList = window.tempList.map(temp => (temp * 1.8) + 32)
+                window.myChart.data.datasets[0].data = window.tempList
                 window.myChart.data.datasets[0].label = "Temperatures"
             }
             

@@ -1,4 +1,5 @@
 const menu = document.getElementById("menu")
+const alert_message = document.getElementById("alert_message")
 const currentTemperature = document.getElementById("currentTemperature")
 const amy = document.getElementById("amy")
 let currentMeisure = document.getElementById("currentMeisure")
@@ -29,7 +30,13 @@ const watch4 = document.getElementById("watch4")
 const watch5 = document.getElementById("watch5")
 const currentUnit = document.getElementById("currentUnit")
 const temperatura = document.getElementById("temperatura")
+const closeAdvise = document.getElementById("closeAdvice")
 
+let temp;
+let humd;
+let watchList;
+let tempList;
+let humdList;
 let humedad;
 let idioma;
 
@@ -43,6 +50,11 @@ const symbols = ["@", "#", "$", "%", "&", "*", "<", ">", "{", "}", "[", "]", "("
 let amyInterval;
 let temperaturesInterval;
 window.currentMeisure = "Celcius";
+window.temp = "";
+window.humd = "";
+window.watchList = ["Na","Na","Na", "Na", "Na"];
+window.tempList = ["Na","Na","Na", "Na", "Na"];
+window.humdList = ["Na","Na","Na", "Na", "Na"];
 
 
 
@@ -83,6 +95,76 @@ let translations = {
         temperatura : "Temperatuur"
     }
 }
+
+async function connectToArduino(){
+    try{
+        alert_message.style.display = "none"
+        const port = await navigator.serial.requestPort();
+        await port.open({baudRate : 9600});
+        const decoder = new TextDecoderStream()
+        port.readable.pipeTo(decoder.writable)
+        const inputStream = decoder.readable
+        const reader = inputStream.getReader()
+        let buffer = ""
+        while (true){
+            const {value, done} = await reader.read()
+            if (done){
+                break
+            }
+
+            if (value){
+                buffer += value
+                lines = buffer.split("\n")
+                for (i = 0; i < lines.length - 1; i++){
+                    [window.humd, window.temp] = lines[i].split(",")
+                    console.log(window.temp, window.humd)
+                }
+
+                buffer = lines[lines.length - 1]
+            }
+        }
+         
+    }
+    catch (error){
+        console.error(`No se pudo conectar: ${error}`)
+    }
+}
+
+function addHumdTemp(){
+    window.tempList.unshift(window.temp)
+    window.humdList.unshift(window.humd)
+
+    if (window.tempList.length > 5){
+        window.tempList.pop()
+    }
+
+    if (window.humdList.length > 5){
+        window.humdList.pop()
+    }
+
+    console.log(window.humdList, window.tempList)
+}
+
+function watchTempList(){
+    let watch = new Date()
+    if (watch.getMinutes() % 15 === 0 ){
+        addHumdTemp()
+        window.watchList.unshift(`${watch.getHours()}:${watch.getMinutes()}`)
+        if (window.watchList.length > 5){
+            window.watchList.pop()
+        }
+    }
+}
+
+function displayAlertMessage(){
+    alert_message.style.display = "flex"
+}
+
+function closeAlertMessage(){
+    alert_message.style.display = "none"
+}
+
+closeAdvise.addEventListener("click", closeAlertMessage)
 
 function getHumidity(){
     window.humedad = true
@@ -275,68 +357,53 @@ function changeAmyHoverOut(){
 
 
 async function updateCurrentTemperature(){
-    const response = await fetch("/data")
-    const data = await response.json()
     if (window.humedad == true){
-        let humd = data.humidity
-        currentTemperature.innerText = humd
+        currentTemperature.innerText = Math.floor(window.humd)
     }
-    if (window.humedad == false){
-        let temp = data.temperature.toFixed(1)   
+    if (window.humedad == false){  
             if (window.currentMeisure == "Celcius"){
-            currentTemperature.innerText = temp
+            currentTemperature.innerText = Math.floor(window.temp)
             }
             else if (window.currentMeisure == "Fahrenheit"){
-            currentTemperature.innerText = (temp * 1.8) + 32 
+            currentTemperature.innerText = Math.floor((window.temp * 1.8) + 32) 
             }
         }
 }
 
 async function getLastTemperaturesJS(){
-    let response = await fetch("/lastTemperatures")
-    let data = await response.json()
-    temperaturesHistory = data.lastTemperatures
-    humidityHistory = data.lastHumidities
-
-
     if (window.humedad === false){
         if (window.currentMeisure === "Celcius"){ 
-            temperature1.innerText = temperaturesHistory[0] + "°C"
-            temperature2.innerText = temperaturesHistory[1] + "°C"
-            temperature3.innerText = temperaturesHistory[2] + "°C"
-            temperature4.innerText = temperaturesHistory[3] + "°C"
-            temperature5.innerText = temperaturesHistory[4] + "°C" 
+            temperature1.innerText = Math.floor(window.tempList[0]) + "°C"
+            temperature2.innerText = Math.floor(window.tempList[1]) + "°C"
+            temperature3.innerText = Math.floor(window.tempList[2]) + "°C"
+            temperature4.innerText = Math.floor(window.tempList[3]) + "°C"
+            temperature5.innerText = Math.floor(window.tempList[4]) + "°C"
         }
 
         else if (window.currentMeisure === "Fahrenheit"){
-            temperature1.innerText = ((temperaturesHistory[0] * 1.8) + 32) + "°F"
-            temperature2.innerText = ((temperaturesHistory[1] * 1.8) + 32) + "°F"
-            temperature3.innerText = ((temperaturesHistory[2] * 1.8) + 32) + "°F"
-            temperature4.innerText = ((temperaturesHistory[3] * 1.8) + 32) + "°F"
-            temperature5.innerText = ((temperaturesHistory[4] * 1.8) + 32) + "°F"
+            temperature1.innerText = Math.floor(((window.tempList[0] * 1.8) + 32)) + "°F"
+            temperature2.innerText = Math.floor(((window.tempList[1] * 1.8) + 32)) + "°F"
+            temperature3.innerText = Math.floor(((window.tempList[2] * 1.8) + 32)) + "°F"
+            temperature4.innerText = Math.floor(((window.tempList[3] * 1.8) + 32)) + "°F"
+            temperature5.innerText = Math.floor(((window.tempList[4] * 1.8) + 32)) + "°F"
         }
     }
     
     else if (window.humedad === true){
-        temperature1.innerText = humidityHistory[0] + "%"
-        temperature2.innerText = humidityHistory[1] + "%"
-        temperature3.innerText = humidityHistory[2] + "%"
-        temperature4.innerText = humidityHistory[3] + "%"
-        temperature5.innerText = humidityHistory[4] + "%"
+        temperature1.innerText = Math.floor(window.humdList[0]) + "%"
+        temperature2.innerText = Math.floor(window.humdList[1]) + "%"
+        temperature3.innerText = Math.floor(window.humdList[2]) + "%"
+        temperature4.innerText = Math.floor(window.humdList[3]) + "%"
+        temperature5.innerText = Math.floor(window.humdList[4]) + "%"
     }
 }
 
 async function getTime(){
-    let response = await fetch("/lastTemperatures")
-    let data = await response.json()
-    let lastTimes = data.lastTimes
-
-
-    watch1.innerText = lastTimes[0]
-    watch2.innerText = lastTimes[1]
-    watch3.innerText = lastTimes[2]
-    watch4.innerText = lastTimes[3]
-    watch5.innerText = lastTimes[4]
+    watch1.innerText = window.watchList[0]
+    watch2.innerText = window.watchList[1]
+    watch3.innerText = window.watchList[2]
+    watch4.innerText = window.watchList[3]
+    watch5.innerText = window.watchList[4]
 
 }
 
@@ -371,7 +438,7 @@ function logout(){
     .then(() => window.location.href = "/login")
 }
 
-
+setInterval(watchTempList, 1000)
 setInterval(modifyCurrentText, 1000)
 setInterval(getTime, 1000)
 setInterval(getLastTemperaturesJS, 1000)
