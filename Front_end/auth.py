@@ -33,7 +33,7 @@ def login():
                 return redirect("/login")
     except Exception as e:
         print(f"Ocurrio un error {e}")
-        return("ocurrio un error")
+        return redirect ("/login")
     
         
 
