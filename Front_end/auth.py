@@ -7,29 +7,34 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
+    try:
+        if request.method == "POST":
+            email = request.form.get("email")
+            password = request.form.get("password")
 
-        sql = "SELECT email, password, name FROM greenhouse_users WHERE email = %s"
-        value = (email, )
-        cursor = db.cursor()
-        cursor.execute(sql,value)
-        row = cursor.fetchone()
-        cursor.close()
+            sql = "SELECT email, password, name FROM greenhouse_users WHERE email = %s"
+            value = (email, )
+            cursor = db.cursor()
+            cursor.execute(sql,value)
+            row = cursor.fetchone()
+            cursor.close()
 
-        if row == None:
-            flash("Email didn't found")
-            return redirect("/login")
+            if row == None:
+                flash("Email didn't found")
+                return redirect("/login")
         
-        if check_password_hash(row[1], password):
-            session["user_name"] = row[2]
-            session["email"] = row[0]
-            gconfig.email = row[0]
-            return redirect("/")
-        else:
-            flash("Password is incorrect")
-            return redirect("/login")
+            if check_password_hash(row[1], password):
+                session["user_name"] = row[2]
+                session["email"] = row[0]
+                gconfig.email = row[0]
+                return redirect("/")
+            else:
+                flash("Password is incorrect")
+                return redirect("/login")
+    except Exception as e:
+        print(f"Ocurrio un error {e}")
+        return("ocurrio un error")
+    
         
 
 
