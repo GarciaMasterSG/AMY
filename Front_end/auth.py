@@ -43,20 +43,24 @@ def login():
 
 @auth.route("/signup", methods=["GET", "POST"])
 def signup():
-    if request.method == "POST":
-        name = request.form.get("user_name")
-        email = request.form.get("email")
-        password = request.form.get("password")
+    try :
+        if request.method == "POST":
+            name = request.form.get("user_name")
+            email = request.form.get("email")
+            password = request.form.get("password")
 
-        hashed_password = generate_password_hash(password)
+            hashed_password = generate_password_hash(password)
 
-        sql = "INSERT INTO greenhouse_users(name, email,password) VALUES (%s, %s, %s)"
-        values = (name, email, hashed_password)
-        cursor = db.cursor()
-        cursor.execute(sql, values)
-        db.commit()
-        cursor.close()
-        return redirect("/login")
+            sql = "INSERT INTO greenhouse_users(name, email,password) VALUES (%s, %s, %s)"
+            values = (name, email, hashed_password)
+            cursor = db.cursor()
+            cursor.execute(sql, values)
+            db.commit()
+            cursor.close()
+            return redirect("/login")
+    except Exception as e:
+        print(f"Ocurrio este error {e}")
+        return redirect("/signup")
 
         
 
